@@ -1,8 +1,11 @@
 # api/index.py
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from typing import List
+
 from datetime import datetime
 import models, auth, database
 
@@ -19,25 +22,7 @@ app.add_middleware(
 # Create tables on cold start
 models.Base.metadata.create_all(bind=database.engine)
 
-from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from typing import List
-from pydantic import BaseModel
-from datetime import datetime
-import models, schemas, auth, database
 
-app = FastAPI(title="Office Job Workflow API")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"], # Change to frontend URL in production
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-models.Base.metadata.create_all(bind=database.engine)
 
 # --- Pydantic Schemas (Inline for brevity) ---
 class UserBase(BaseModel):
