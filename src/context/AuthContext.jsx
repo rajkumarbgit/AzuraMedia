@@ -1,11 +1,13 @@
 import { createContext, useState, useContext } from 'react';
 import api from '../api';
 
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] =useState(
+    localStorage.getItem('token') ? { role: localStorage.getItem('role') } : null
+  );
 
 
 
@@ -16,7 +18,7 @@ const login = async (username, password) => {
     formData.append('username', username);
     formData.append('password', password);
     // Change to relative path
-    const res = await axios.post('/api/token', formData);
+    const res = await api.post('/api/token', formData);
     localStorage.setItem('token', res.data.access_token);
     localStorage.setItem('role', res.data.role);
     setUser({ role: res.data.role });
