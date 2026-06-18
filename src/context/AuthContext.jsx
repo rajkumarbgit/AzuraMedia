@@ -14,3 +14,7 @@ const login = async (username, password) => {
     return false;
   }
 };
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
