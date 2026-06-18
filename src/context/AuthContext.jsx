@@ -1,3 +1,14 @@
+import { createContext, useState, useContext } from 'react';
+import api from '../api';
+
+const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+
+
 // Change the login function inside AuthContext.jsx
 const login = async (username, password) => {
   try {
@@ -15,6 +26,17 @@ const login = async (username, password) => {
   }
 };
 
-export const useAuth = () => {
-  return useContext(AuthContext);
+ const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
+
+export const useAuth = () => useContext(AuthContext);
